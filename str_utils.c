@@ -4,17 +4,14 @@
 #include <string.h>
 
 #include "utils/str_utils.h"
+#include "utils/utils.h"
 
 char* str_plus(const char* front, const char* back)
 {
   assert(front);
   assert(back);
 
-  char* actual = malloc(strlen(front) + strlen(back) + 1);
-  if (!actual) {
-    fprintf(stderr, "Failed to allocate memory for str_plus(%s, %s)\n", front, back);
-    return NULL;
-  }
+  char* actual = malloc_err(strlen(front) + strlen(back) + 1, "str_plus", ({ return NULL; }));
 
   strcpy(actual, front);
   strcat(actual, back);
