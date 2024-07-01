@@ -6,7 +6,7 @@
 int is_file_size_multiple_of(const char* filename, size_t size)
 {
   ssize_t len = get_file_size_bytes(filename);
-  if(len < 0){
+  if (len < 0) {
     fprintf(stderr, "Failed to get size of file: %s\n", filename);
     return -1;
   }
