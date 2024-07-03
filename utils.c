@@ -1,8 +1,7 @@
+#include "utils/common.h"
 #include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
-
-#include "utils/utils.h"
 
 size_t floored_power_of_two(size_t val)
 {
@@ -19,3 +18,15 @@ void printf_if_verbose(int verbose, const char* format, ...)
     va_end(args);
   }
 }
+
+/**
+ * int Print Failed Verb to reduce boilerplate code
+ * @brief Quick wrapper around error messaging for int return type
+ */
+int int_pfv(int p, const char* verb_phrase)
+{
+  if (p)
+    fprintf(stderr, "Failed to %s\n", verb_phrase);
+  return p;
+}
+

@@ -1,15 +1,12 @@
 #include <assert.h>
+#include <complex.h>
 #include <unistd.h>
 
-#include "utils/file_utils.h"
+#include "utils/files.h"
 
 int is_file_size_multiple_of(const char* filename, size_t size)
 {
-  ssize_t len = get_file_size_bytes(filename);
-  if (len < 0) {
-    fprintf(stderr, "Failed to get size of file: %s\n", filename);
-    return -1;
-  }
+  size_t len = get_file_size_bytes(filename);
   return len % size == 0;
 }
 
@@ -101,13 +98,14 @@ ssize_t truncate_into(const char* input, const char* output, size_t target_size)
 
 int write_data_to_file(
     const char* fname,
+    const char* mode,
     const void* data,
     size_t bytes_len)
 {
   assert(fname);
   assert(data);
 
-  FILE* fp = fopen_err(fname, "wb", ({ return -1; }));
+  FILE* fp = fopen_err(fname, mode, ({ return -1; }));
 
   int ret = 0;
   if (fwrite(data, 1, bytes_len, fp) != bytes_len) {
@@ -128,13 +126,7 @@ int read_data_from_file(const char* fname, void* dest, size_t bytes_len)
   assert(dest);
   assert(fname);
 
-  ssize_t actual_bytes_len = get_file_size_bytes(fname);
-  if (actual_bytes_len < 0) {
-    fprintf(stderr, "Failed to get length of file: %s\n", fname);
-    return -1;
-  }
-
-  if ((size_t)actual_bytes_len != bytes_len) {
+  if (get_file_size_bytes(fname) != bytes_len) {
     fprintf(stderr, "Reading file: %s but size is "
                     "not expected length: %zu bytes\n",
         fname, bytes_len);
@@ -157,4 +149,10 @@ int read_data_from_file(const char* fname, void* dest, size_t bytes_len)
   }
 
   return ret;
+}
+
+int empty_file(const char* fname)
+{
+  FILE* file = fopen_err(fname, "w", ({ return -1; }));
+  return fclose(file);
 }

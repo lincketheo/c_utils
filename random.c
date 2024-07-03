@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "utils/random.h"
 
 uint8_t random_uint8(uint8_t low, uint8_t high)
@@ -72,6 +70,12 @@ void random_doubles(double* buffer, size_t length, double low, double high)
   for (size_t i = 0; i < length; ++i) {
     buffer[i] = random_double(low, high);
   }
+}
+
+void random_fixed_points(uint16_t* buffer, size_t length, float low, float high)
+{
+  fprintf(stderr, "Unimplemented\n");
+  exit(1);
 }
 
 void random_complex_uint8s(uint8_t* buffer, size_t length, uint8_t low, uint8_t high)

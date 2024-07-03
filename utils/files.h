@@ -4,8 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "utils.h"
-
+#include "common.h"
 
 /**
  * Same as unwrap, but adds a print statement to the expr.
@@ -35,8 +34,29 @@ ssize_t truncate_into(const char* input, const char* output, size_t target_size)
 
 ssize_t get_file_size_bytes(const char* filename);
 
-int write_data_to_file(const char* fname, const void* data, size_t bytes_len);
+int write_data_to_file(
+    const char* fname,
+    const char* mode,
+    const void* data,
+    size_t bytes_len);
+
+#define write_and_free_data_to_file(fname, mode, data, bytes_len) ({ \
+  int ret = write_data_to_file(fname, mode, data, bytes_len);        \
+  free(data);                                                        \
+  ret;                                                               \
+})
 
 int read_data_from_file(const char* fname, void* dest, size_t bytes_len);
+
+int empty_file(const char* fname);
+
+#define empty_file_if_not_null(fname) \
+  ({                                  \
+    int ret = 0;                      \
+    if (fname) {                      \
+      ret = empty_file(fname);        \
+    }                                 \
+    ret;                              \
+  })
 
 #endif
